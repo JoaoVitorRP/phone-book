@@ -63,49 +63,63 @@
     <script>
       const app = angular.module("listaTelefonica", []);
 
-      app.controller("listaTelefonicaCtrl", function ($scope) {
+      app.controller("listaTelefonicaCtrl", function ($scope, $http) {
         $scope.app = "Lista Telefônica";
 
-        // Mock Contatos
-        $scope.contatos = [
-          { nome: "Pedro", telefone: "51 99261-8753", operadora: { nome: "Tim", codigo: 41, categoria: "Celular" } },
-          { nome: "Ana", telefone: "48 96549-2003", operadora: { nome: "Claro", codigo: 21, categoria: "Celular" } },
-          { nome: "Maria", telefone: "11 95214-6327", operadora: { nome: "Claro", codigo: 21, categoria: "Celular" } },
-        ];
-
-        $scope.operadoras = [
-          { nome: "Oi", codigo: 14, categoria: "Celular" },
-          { nome: "Vivo", codigo: 15, categoria: "Celular" },
-          { nome: "Tim", codigo: 41, categoria: "Celular" },
-          { nome: "Claro", codigo: 21, categoria: "Celular" },
-          { nome: "GVT", codigo: 25, categoria: "Fixo" },
-          { nome: "Embratel", codigo: 21, categoria: "Fixo" },
-        ];
-        // Mock Contatos
-
-        // Funções Contatos
-        $scope.adicionarContato = function (contato) {
-          $scope.contatos.push(angular.copy(contato));
-
-          delete $scope.contato;
-
-          $scope.contatoForm.$setPristine();
-        };
-
-        $scope.excluirContatos = function (contatos) {
-          $scope.contatos = contatos.filter(function (contato) {
-            if (!contato.selecionado) return contato;
+        // Comunicação com o back-end
+        // Get
+        const carregarContatos = function () {
+          $http.get("https://67a9e52965ab088ea7e4e052.mockapi.io/api/contacts").then(function (data) {
+            $scope.contatos = data.data;
           });
         };
 
+        const carregarOperadoras = function () {
+          $http.get("https://67a9e52965ab088ea7e4e052.mockapi.io/api/operadoras").then(function (data) {
+            $scope.operadoras = data.data;
+          });
+        };
+
+        carregarContatos();
+        carregarOperadoras();
+        // Get
+
+        // Post
+        $scope.adicionarContato = function (contato) {
+          $http.post("https://67a9e52965ab088ea7e4e052.mockapi.io/api/contacts", contato).then(function (data) {
+            delete $scope.contato;
+
+            $scope.contatoForm.$setPristine();
+
+            carregarContatos();
+          });
+        };
+        // Post
+
+        //Delete
+        $scope.excluirContatos = function (contatos) {
+          for (let i = 0; i < contatos.length; i++) {
+            const contato = contatos[i];
+
+            if (contato.selecionado) {
+              $http
+                .delete(`https://67a9e52965ab088ea7e4e052.mockapi.io/api/contacts/${contato.id}`)
+                .then(function (data) {
+                  carregarContatos();
+                });
+            }
+          }
+        };
+        //Delete
+        // Comunicação com o back-end
+
+        // Funções Extras
         $scope.isContatoSelecionado = function (contatos) {
           return contatos.some(function (contato) {
             return contato.selecionado;
           });
         };
-        // Funções Contatos
 
-        // Funções Extras
         $scope.ordernarPor = function (campo) {
           $scope.criterioDeOrdenacao = campo;
 
