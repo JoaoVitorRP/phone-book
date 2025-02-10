@@ -1,0 +1,1 @@
+Projeto feito utilizando AngularJS + HTML/CSS no front-end, com o fim de aprender a sintaxe do framework e suas nuances, retirado do minicurso feito por <a href="https://www.youtube.com/@RodrigoBranas">Rodrigo Branas</a>.
