@@ -8,126 +8,13 @@
 
     <!-- Style -->
     <link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.css" />
-    <style>
-      .jumbotron {
-        width: 600px;
-        text-align: center;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 20px;
-        background-color: rgba(0, 0, 0, 0.05);
-        padding: 20px;
-      }
-
-      h3 {
-        margin-bottom: 15px;
-      }
-
-      .table {
-        margin-top: 20px;
-      }
-
-      .form-control,
-      .form-select {
-        margin-bottom: 8px;
-      }
-
-      .btn {
-        margin-top: 15px;
-      }
-
-      .selecionado {
-        font-weight: 700;
-      }
-
-      .card {
-        background-color: rgba(0, 0, 0, 0.05);
-        margin: 50px 0 0 0;
-        border-radius: 0;
-        padding: 20px;
-      }
-
-      a {
-        color: inherit;
-      }
-
-      .alert {
-        margin-top: 15px;
-        margin-bottom: 0;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/app.css" />
     <!-- Style -->
 
     <!-- Controller -->
     <script src="lib/angular/angular.js"></script>
-    <script>
-      const app = angular.module("listaTelefonica", []);
-
-      app.controller("listaTelefonicaCtrl", function ($scope, $http) {
-        $scope.app = "Lista Telefônica";
-
-        // Comunicação com o back-end
-        // Get
-        const carregarContatos = function () {
-          $http.get("https://67a9e52965ab088ea7e4e052.mockapi.io/api/contacts").then(function (data) {
-            $scope.contatos = data.data;
-          });
-        };
-
-        const carregarOperadoras = function () {
-          $http.get("https://67a9e52965ab088ea7e4e052.mockapi.io/api/operadoras").then(function (data) {
-            $scope.operadoras = data.data;
-          });
-        };
-
-        carregarContatos();
-        carregarOperadoras();
-        // Get
-
-        // Post
-        $scope.adicionarContato = function (contato) {
-          $http.post("https://67a9e52965ab088ea7e4e052.mockapi.io/api/contacts", contato).then(function (data) {
-            delete $scope.contato;
-
-            $scope.contatoForm.$setPristine();
-
-            carregarContatos();
-          });
-        };
-        // Post
-
-        //Delete
-        $scope.excluirContatos = function (contatos) {
-          for (let i = 0; i < contatos.length; i++) {
-            const contato = contatos[i];
-
-            if (contato.selecionado) {
-              $http
-                .delete(`https://67a9e52965ab088ea7e4e052.mockapi.io/api/contacts/${contato.id}`)
-                .then(function (data) {
-                  carregarContatos();
-                });
-            }
-          }
-        };
-        //Delete
-        // Comunicação com o back-end
-
-        // Funções Extras
-        $scope.isContatoSelecionado = function (contatos) {
-          return contatos.some(function (contato) {
-            return contato.selecionado;
-          });
-        };
-
-        $scope.ordernarPor = function (campo) {
-          $scope.criterioDeOrdenacao = campo;
-
-          $scope.direcaoDaOrdenacao = !$scope.direcaoDaOrdenacao;
-        };
-        // Funções Extras
-      });
-    </script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers/listaTelefonicaCtrl.js"></script>
     <!-- Controller -->
   </head>
 
@@ -227,7 +114,7 @@
     <!-- Lista Telefônica -->
 
     <!-- Footer -->
-    <div ng-include=" 'footer.html' "></div>
+    <div ng-include=" 'view/footer.html' "></div>
     <!-- Footer -->
   </body>
   <!-- View -->
