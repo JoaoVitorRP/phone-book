@@ -4,15 +4,27 @@ app.controller("listaTelefonicaCtrl", function ($scope, contatosAPI, operadorasA
   // Comunicação com o back-end
   // Get
   const carregarContatos = function () {
-    contatosAPI.getContatos().then(function (data) {
-      $scope.contatos = data.data;
-    });
+    contatosAPI
+      .getContatos()
+      .then(function (data) {
+        $scope.contatos = data.data;
+      })
+      .catch(function (data) {
+        $scope.title = "Ocorreu um erro ao carregar os contatos!";
+        $scope.error = `Erro: ${data.data}, código: ${data.status}`;
+      });
   };
 
   const carregarOperadoras = function () {
-    operadorasAPI.getOperadoras().then(function (data) {
-      $scope.operadoras = data.data;
-    });
+    operadorasAPI
+      .getOperadoras()
+      .then(function (data) {
+        $scope.operadoras = data.data;
+      })
+      .catch(function (data) {
+        $scope.title = "Ocorreu um erro ao carregar as operadoras!";
+        $scope.error = `Erro: ${data.data}, código: ${data.status}`;
+      });
   };
 
   carregarContatos();
@@ -21,13 +33,19 @@ app.controller("listaTelefonicaCtrl", function ($scope, contatosAPI, operadorasA
 
   // Post
   $scope.adicionarContato = function (contato) {
-    contatosAPI.saveContato(contato).then(function () {
-      delete $scope.contato;
+    contatosAPI
+      .saveContato(contato)
+      .then(function () {
+        delete $scope.contato;
 
-      $scope.contatoForm.$setPristine();
+        $scope.contatoForm.$setPristine();
 
-      carregarContatos();
-    });
+        carregarContatos();
+      })
+      .catch(function (data) {
+        $scope.title = "Ocorreu um erro ao adicionar o contato!";
+        $scope.error = `Erro: ${data.data}, código: ${data.status}`;
+      });
   };
   // Post
 
@@ -37,9 +55,15 @@ app.controller("listaTelefonicaCtrl", function ($scope, contatosAPI, operadorasA
       const contato = contatos[i];
 
       if (contato.selecionado) {
-        contatosAPI.deleteContato(contato.id).then(function () {
-          carregarContatos();
-        });
+        contatosAPI
+          .deleteContato(contato.id)
+          .then(function () {
+            carregarContatos();
+          })
+          .catch(function (data) {
+            $scope.title = "Ocorreu um erro ao deletar o contato!";
+            $scope.error = `Erro: ${data.data}, código: ${data.status}`;
+          });
       }
     }
   };
