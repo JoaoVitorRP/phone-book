@@ -1,0 +1,54 @@
+<!-- Lista Telefônica -->
+<div class="jumbotron">
+  <h3>{{app}}</h3>
+
+  <!-- Campo de busca -->
+  <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você está buscando?" />
+  <!-- Campo de busca -->
+
+  <!-- Mensagens de erro -->
+  <ui-alert title="title" message="error" ng-show="error"></ui-alert>
+  <!-- Mensagens de erro -->
+
+  <!-- Lista de contatos -->
+  <table class="table table-striped" ng-show="contatos.length > 0">
+    <tr>
+      <th></th>
+      <th><a href="" ng-click="ordernarPor('nome')">Nome</a></th>
+      <th><a href="" ng-click="ordernarPor('telefone')">Telefone</a></th>
+      <th><a href="">Aniversário</a></th>
+      <th><a href="" ng-click="ordernarPor('operadora')">Operadora</a></th>
+    </tr>
+    <tr
+      ng-class="{bold: contato.selecionado}"
+      ng-repeat="contato in contatos | filter:criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao"
+    >
+      <td><input class="pointer" role="button" type="checkbox" ng-model="contato.selecionado" /></td>
+      <td>{{contato.nome | name | ellipsis:15}}</td>
+      <td>{{contato.telefone}}</td>
+      <td>{{contato.aniversario}}</td>
+      <td>{{contato.operadora.nome}}</td>
+    </tr>
+  </table>
+  <!-- Lista de contatos -->
+
+  <hr />
+
+  <!-- Botão de navegação -->
+  <a href="#!/addContato" class="d-grid no-decor"><button class="btn btn-primary">Novo Contato</button></a>
+  <!-- Botão de navegação -->
+
+  <!-- Excluir contatos -->
+  <div class="d-grid">
+    <button
+      class="btn btn-danger"
+      ng-click="excluirContatos(contatos)"
+      ng-disabled="!isContatoSelecionado(contatos)"
+      ng-show="isContatoSelecionado(contatos)"
+    >
+      Excluir Selecionados
+    </button>
+  </div>
+  <!-- Excluir contatos -->
+</div>
+<!-- Lista Telefônica -->

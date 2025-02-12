@@ -1,1 +1,1 @@
-const app = angular.module("listaTelefonica", []);
+const app = angular.module("listaTelefonica", ["ngRoute"]);
